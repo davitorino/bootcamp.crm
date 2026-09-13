@@ -14,8 +14,8 @@ const nunitoSans = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "bootcamp.crm",
-  description: "CRM em desenvolvimento",
+  title: "LSG Partners",
+  description: "CRM da LSG Partners",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

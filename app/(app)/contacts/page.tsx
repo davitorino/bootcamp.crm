@@ -1,12 +1,22 @@
 import { createClient } from "@/lib/supabase/server";
 import { createContact, deleteContact } from "./actions";
+import { DbNotReadyBanner } from "../DbNotReadyBanner";
 
 export default async function ContactsPage() {
   const supabase = await createClient();
-  const { data: contacts } = await supabase
+  const { data: contacts, error } = await supabase
     .from("contacts")
     .select("*")
     .order("created_at", { ascending: false });
+
+  if (error) {
+    return (
+      <div className="flex flex-col gap-4">
+        <h1 className="text-xl font-extrabold text-ink dark:text-white">Contatos</h1>
+        <DbNotReadyBanner table="contacts" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-8">

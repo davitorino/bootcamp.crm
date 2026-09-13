@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createDeal, type DealStage } from "./actions";
 import { DealCard } from "./DealCard";
+import { DbNotReadyBanner } from "../DbNotReadyBanner";
 
 const STAGES: { value: DealStage; label: string }[] = [
   { value: "novo", label: "Novo" },
@@ -14,13 +15,22 @@ const STAGES: { value: DealStage; label: string }[] = [
 export default async function DealsPage() {
   const supabase = await createClient();
 
-  const [{ data: deals }, { data: contacts }] = await Promise.all([
+  const [{ data: deals, error }, { data: contacts }] = await Promise.all([
     supabase
       .from("deals")
       .select("id, title, value, stage, contacts(name)")
       .order("created_at", { ascending: false }),
     supabase.from("contacts").select("id, name").order("name"),
   ]);
+
+  if (error) {
+    return (
+      <div className="flex flex-col gap-4">
+        <h1 className="text-xl font-extrabold text-ink dark:text-white">Negócios</h1>
+        <DbNotReadyBanner table="deals" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-8">

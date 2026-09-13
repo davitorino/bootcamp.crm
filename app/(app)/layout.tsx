@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { signOut } from "../login/actions";
+import { Logo } from "@/app/components/Logo";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,9 +8,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <header className="bg-ink">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-6">
-            <span className="font-extrabold text-white">
-              bootcamp<span className="text-brand">.crm</span>
-            </span>
+            <Logo textClassName="text-white" iconSize={24} />
             <nav className="flex gap-4 text-sm font-semibold">
               <Link
                 href="/clients"

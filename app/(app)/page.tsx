@@ -10,7 +10,7 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col gap-2">
       <h1 className="text-2xl font-extrabold text-ink dark:text-white">
-        Bem-vindo ao bootcamp<span className="text-brand">.crm</span>
+        Bem-vindo à LSG Partners
       </h1>
       <p className="text-zinc-600 dark:text-zinc-400">
         Login realizado com sucesso{user?.email ? ` como ${user.email}` : ""}.

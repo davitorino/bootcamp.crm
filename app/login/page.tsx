@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { signIn, signUp, type AuthState } from "./actions";
+import { Logo } from "@/app/components/Logo";
 
 const initialState: AuthState = {};
 
@@ -17,8 +18,8 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 dark:bg-black">
       <div className="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
-        <h1 className="mb-1 text-2xl font-extrabold text-ink dark:text-white">
-          bootcamp<span className="text-brand">.crm</span>
+        <h1 className="mb-1">
+          <Logo textClassName="text-2xl text-ink dark:text-white" iconSize={32} />
         </h1>
         <p className="mb-6 text-sm text-muted">
           {mode === "signin" ? "Entre na sua conta" : "Crie sua conta"}
