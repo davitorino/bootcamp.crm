@@ -12,14 +12,19 @@ create table if not exists public.contacts (
   created_at timestamptz not null default now()
 );
 
-create type public.deal_stage as enum (
-  'novo',
-  'contato_feito',
-  'proposta',
-  'negociacao',
-  'ganho',
-  'perdido'
-);
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'deal_stage') then
+    create type public.deal_stage as enum (
+      'novo',
+      'contato_feito',
+      'proposta',
+      'negociacao',
+      'ganho',
+      'perdido'
+    );
+  end if;
+end $$;
 
 create table if not exists public.deals (
   id uuid primary key default gen_random_uuid(),
@@ -35,21 +40,29 @@ create table if not exists public.deals (
 alter table public.contacts enable row level security;
 alter table public.deals enable row level security;
 
+drop policy if exists "contacts_owner_select" on public.contacts;
 create policy "contacts_owner_select" on public.contacts
   for select using (auth.uid() = owner_id);
+drop policy if exists "contacts_owner_insert" on public.contacts;
 create policy "contacts_owner_insert" on public.contacts
   for insert with check (auth.uid() = owner_id);
+drop policy if exists "contacts_owner_update" on public.contacts;
 create policy "contacts_owner_update" on public.contacts
   for update using (auth.uid() = owner_id);
+drop policy if exists "contacts_owner_delete" on public.contacts;
 create policy "contacts_owner_delete" on public.contacts
   for delete using (auth.uid() = owner_id);
 
+drop policy if exists "deals_owner_select" on public.deals;
 create policy "deals_owner_select" on public.deals
   for select using (auth.uid() = owner_id);
+drop policy if exists "deals_owner_insert" on public.deals;
 create policy "deals_owner_insert" on public.deals
   for insert with check (auth.uid() = owner_id);
+drop policy if exists "deals_owner_update" on public.deals;
 create policy "deals_owner_update" on public.deals
   for update using (auth.uid() = owner_id);
+drop policy if exists "deals_owner_delete" on public.deals;
 create policy "deals_owner_delete" on public.deals
   for delete using (auth.uid() = owner_id);
 
@@ -90,12 +103,16 @@ alter table public.clients add column if not exists ultimo_contato_em date;
 
 alter table public.clients enable row level security;
 
+drop policy if exists "clients_owner_select" on public.clients;
 create policy "clients_owner_select" on public.clients
   for select using (auth.uid() = owner_id);
+drop policy if exists "clients_owner_insert" on public.clients;
 create policy "clients_owner_insert" on public.clients
   for insert with check (auth.uid() = owner_id);
+drop policy if exists "clients_owner_update" on public.clients;
 create policy "clients_owner_update" on public.clients
   for update using (auth.uid() = owner_id);
+drop policy if exists "clients_owner_delete" on public.clients;
 create policy "clients_owner_delete" on public.clients
   for delete using (auth.uid() = owner_id);
 
