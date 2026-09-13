@@ -12,6 +12,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </span>
             <nav className="flex gap-4 text-sm">
               <Link
+                href="/clients"
+                className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+              >
+                Clientes
+              </Link>
+              <Link
                 href="/contacts"
                 className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
               >

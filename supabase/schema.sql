@@ -56,3 +56,29 @@ create policy "deals_owner_delete" on public.deals
 create index if not exists deals_contact_id_idx on public.deals (contact_id);
 create index if not exists contacts_owner_id_idx on public.contacts (owner_id);
 create index if not exists deals_owner_id_idx on public.deals (owner_id);
+
+-- Clientes (planilha Excel) — cadastro de empresas clientes, importado/gerenciado à parte de Contatos/Negócios
+create table if not exists public.clients (
+  id uuid primary key default gen_random_uuid(),
+  owner_id uuid not null references auth.users (id) on delete cascade,
+  razao_social text not null,
+  cnpj text,
+  telefone text,
+  email text,
+  instagram text,
+  created_at timestamptz not null default now()
+);
+
+alter table public.clients enable row level security;
+
+create policy "clients_owner_select" on public.clients
+  for select using (auth.uid() = owner_id);
+create policy "clients_owner_insert" on public.clients
+  for insert with check (auth.uid() = owner_id);
+create policy "clients_owner_update" on public.clients
+  for update using (auth.uid() = owner_id);
+create policy "clients_owner_delete" on public.clients
+  for delete using (auth.uid() = owner_id);
+
+create index if not exists clients_owner_id_idx on public.clients (owner_id);
+create unique index if not exists clients_owner_cnpj_idx on public.clients (owner_id, cnpj);
