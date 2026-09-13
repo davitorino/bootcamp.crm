@@ -30,7 +30,7 @@ export function DealCard({ deal }: { deal: Deal }) {
         <p className="text-xs text-zinc-500 dark:text-zinc-400">{deal.contacts.name}</p>
       )}
       {deal.value != null && (
-        <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
+        <p className="mt-1 text-sm font-bold text-accent">
           {deal.value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
         </p>
       )}

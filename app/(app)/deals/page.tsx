@@ -25,7 +25,7 @@ export default async function DealsPage() {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+        <h1 className="mb-4 text-xl font-extrabold text-ink dark:text-white">
           Novo negócio
         </h1>
         <form
@@ -58,7 +58,7 @@ export default async function DealsPage() {
           />
           <button
             type="submit"
-            className="rounded-md bg-zinc-900 px-3 py-2 text-sm font-medium text-white hover:bg-zinc-700 sm:col-span-3 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="rounded-md bg-brand px-3 py-2 text-sm font-bold text-white transition-colors hover:bg-brand/90 sm:col-span-3"
           >
             Adicionar negócio
           </button>
@@ -66,7 +66,7 @@ export default async function DealsPage() {
       </div>
 
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 className="mb-4 text-xl font-extrabold text-ink dark:text-white">
           Pipeline
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
@@ -74,7 +74,15 @@ export default async function DealsPage() {
             const stageDeals = deals?.filter((d) => d.stage === stage.value) ?? [];
             return (
               <div key={stage.value} className="flex flex-col gap-2">
-                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                <p
+                  className={`text-xs font-bold uppercase tracking-wide ${
+                    stage.value === "ganho"
+                      ? "text-accent"
+                      : stage.value === "perdido"
+                        ? "text-zinc-400 dark:text-zinc-500"
+                        : "text-muted"
+                  }`}
+                >
                   {stage.label} ({stageDeals.length})
                 </p>
                 <div className="flex flex-col gap-2">

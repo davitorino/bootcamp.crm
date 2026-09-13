@@ -11,7 +11,7 @@ export default async function ContactsPage() {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+        <h1 className="mb-4 text-xl font-extrabold text-ink dark:text-white">
           Novo contato
         </h1>
         <form
@@ -42,7 +42,7 @@ export default async function ContactsPage() {
           />
           <button
             type="submit"
-            className="rounded-md bg-zinc-900 px-3 py-2 text-sm font-medium text-white hover:bg-zinc-700 sm:col-span-2 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="rounded-md bg-brand px-3 py-2 text-sm font-bold text-white transition-colors hover:bg-brand/90 sm:col-span-2"
           >
             Adicionar contato
           </button>
@@ -50,7 +50,7 @@ export default async function ContactsPage() {
       </div>
 
       <div>
-        <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 className="mb-4 text-xl font-extrabold text-ink dark:text-white">
           Contatos ({contacts?.length ?? 0})
         </h2>
         <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800">

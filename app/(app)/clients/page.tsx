@@ -6,7 +6,7 @@ export default function ClientsPage() {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+        <h1 className="text-xl font-extrabold text-ink dark:text-white">
           Clientes ({clients.length})
         </h1>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -41,7 +41,7 @@ export default function ClientsPage() {
                     href={`https://instagram.com/${c.instagram.replace("@", "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-zinc-700 hover:underline dark:text-zinc-300"
+                    className="font-semibold text-accent hover:underline"
                   >
                     {c.instagram}
                   </a>
