@@ -66,8 +66,27 @@ create table if not exists public.clients (
   telefone text,
   email text,
   instagram text,
+  segmento text,
+  endereco text,
+  servicos_sugeridos text,
+  status_contato text,
+  prioridade text,
+  fonte text,
+  responsavel text,
+  ultimo_contato_em date,
   created_at timestamptz not null default now()
 );
+
+-- Migração aditiva: adiciona as colunas de prospecção em instalações que já rodaram
+-- este arquivo antes dessas colunas existirem (não afeta dados já cadastrados).
+alter table public.clients add column if not exists segmento text;
+alter table public.clients add column if not exists endereco text;
+alter table public.clients add column if not exists servicos_sugeridos text;
+alter table public.clients add column if not exists status_contato text;
+alter table public.clients add column if not exists prioridade text;
+alter table public.clients add column if not exists fonte text;
+alter table public.clients add column if not exists responsavel text;
+alter table public.clients add column if not exists ultimo_contato_em date;
 
 alter table public.clients enable row level security;
 
@@ -82,3 +101,7 @@ create policy "clients_owner_delete" on public.clients
 
 create index if not exists clients_owner_id_idx on public.clients (owner_id);
 create unique index if not exists clients_owner_cnpj_idx on public.clients (owner_id, cnpj);
+
+-- Liga um negócio ao cliente/lead de origem (usado por "Transformar em Negócio").
+alter table public.deals add column if not exists client_id uuid references public.clients (id) on delete set null;
+create index if not exists deals_client_id_idx on public.deals (client_id);

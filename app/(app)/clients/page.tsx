@@ -1,7 +1,45 @@
-import { getClients } from "./data";
+import { createClient } from "@/lib/supabase/server";
+import { DbNotReadyBanner } from "../DbNotReadyBanner";
+import { ClientsTable } from "./ClientsTable";
+import { importLeads } from "./actions";
 
-export default function ClientsPage() {
-  const clients = getClients();
+export default async function ClientsPage() {
+  const supabase = await createClient();
+  const { data: clients, error } = await supabase
+    .from("clients")
+    .select("*")
+    .order("razao_social", { ascending: true });
+
+  if (error) {
+    return (
+      <div className="flex flex-col gap-4">
+        <h1 className="text-xl font-extrabold text-ink dark:text-white">Clientes</h1>
+        <DbNotReadyBanner table="clients" />
+      </div>
+    );
+  }
+
+  if (!clients?.length) {
+    return (
+      <div className="flex flex-col gap-4">
+        <h1 className="text-xl font-extrabold text-ink dark:text-white">Clientes</h1>
+        <div className="rounded-lg border border-zinc-200 bg-white p-6 text-center dark:border-zinc-800 dark:bg-zinc-950">
+          <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
+            Nenhum cliente cadastrado ainda. Importe a lista de prospecção (100
+            estabelecimentos) para começar.
+          </p>
+          <form action={importLeads}>
+            <button
+              type="submit"
+              className="rounded-md bg-brand px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-brand/90"
+            >
+              Importar leads
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -10,47 +48,11 @@ export default function ClientsPage() {
           Clientes ({clients.length})
         </h1>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Lista em ordem alfabética. Dados de exemplo — a importação da planilha
-          Excel substituirá esses registros.
+          Importado de prospecção — dados reais de contato só quando encontrados
+          em fontes públicas.
         </p>
       </div>
-
-      <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
-        <table className="w-full min-w-[800px] text-left text-sm">
-          <thead className="bg-zinc-100 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400">
-            <tr>
-              <th className="px-4 py-2 font-medium">Razão Social</th>
-              <th className="px-4 py-2 font-medium">CNPJ</th>
-              <th className="px-4 py-2 font-medium">Telefone</th>
-              <th className="px-4 py-2 font-medium">E-mail</th>
-              <th className="px-4 py-2 font-medium">Instagram</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clients.map((c) => (
-              <tr
-                key={c.id}
-                className="border-t border-zinc-200 text-zinc-800 dark:border-zinc-800 dark:text-zinc-200"
-              >
-                <td className="px-4 py-2 font-medium">{c.razaoSocial}</td>
-                <td className="px-4 py-2">{c.cnpj}</td>
-                <td className="px-4 py-2">{c.telefone}</td>
-                <td className="px-4 py-2">{c.email}</td>
-                <td className="px-4 py-2">
-                  <a
-                    href={`https://instagram.com/${c.instagram.replace("@", "")}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-accent hover:underline"
-                  >
-                    {c.instagram}
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <ClientsTable clients={clients} />
     </div>
   );
 }
